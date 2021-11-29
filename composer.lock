@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20996594663f24be0c6c5f35901d391b",
+    "content-hash": "fab998bfc162fbbc658ed8317e878430",
     "packages": [
         {
             "name": "brick/math",
@@ -1227,25 +1227,25 @@
         },
         {
             "name": "laminas/laminas-crypt",
-            "version": "3.4.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-crypt.git",
-                "reference": "a058eeb2fe57824b958ac56753faff790a649e18"
+                "reference": "026fe31aa5c9d68679267e5473d64d96f4576020"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-crypt/zipball/a058eeb2fe57824b958ac56753faff790a649e18",
-                "reference": "a058eeb2fe57824b958ac56753faff790a649e18",
+                "url": "https://api.github.com/repos/laminas/laminas-crypt/zipball/026fe31aa5c9d68679267e5473d64d96f4576020",
+                "reference": "026fe31aa5c9d68679267e5473d64d96f4576020",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.2",
                 "ext-mbstring": "*",
-                "laminas/laminas-math": "^3.0",
-                "laminas/laminas-stdlib": "^2.7.7 || ^3.1",
+                "laminas/laminas-math": "^3.4",
+                "laminas/laminas-stdlib": "^3.6",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "replace": {
                 "zendframework/zend-crypt": "^3.3.1"
@@ -1279,7 +1279,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-02-11T19:40:03+00:00"
+            "time": "2021-11-28T16:04:24+00:00"
         },
         {
             "name": "laminas/laminas-db",
