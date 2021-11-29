@@ -18,13 +18,13 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Config extends AbstractHelper
 {
-    protected const CONFIG_PATH_GENERAL = 'auto_complete_address_br/general/%s';
+    public const CONFIG_PATH_GENERAL = 'auto_complete_address_br/general/%s';
 
-    protected const CONFIG_PATH_RELATIONSHIP = 'auto_complete_address_br/general/relationship/%s';
+    public const CONFIG_PATH_RELATIONSHIP = 'auto_complete_address_br/general/relationship/%s';
 
-    protected const CONFIG_PATH_UX = 'auto_complete_address_br/general/ux/%s';
+    public const CONFIG_PATH_UX = 'auto_complete_address_br/general/ux/%s';
 
-    protected const CONFIG_PATH_DEVELOPER = 'auto_complete_address_br/general/developer/%s';
+    public const CONFIG_PATH_DEVELOPER = 'auto_complete_address_br/general/developer/%s';
 
     /**
      * @var ScopeConfigInterface
