@@ -8,6 +8,7 @@
 "4st line of the street","4ª linha do endereço"
 O2TI,O2TI
 "Autocomplete Address for Brazil","Auto Completar Endereço"
+"Fill in the customer's address by the zip code informed","Preencher endereço do cliente pelo CEP informado"
 "Fill in the address data from the entered zip code. Valid only for CEP in Brazil.","Preencha os dados do endereço do código postal inserido. Válido apenas para CEP no Brasil."
 Enabled,Habilitado
 "Number of Lines in a Street Address","Número de linhas do endereço"
