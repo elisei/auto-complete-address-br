@@ -10,6 +10,7 @@ namespace O2TI\AutoCompleteAddressBr\Plugin;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessor;
 use O2TI\AutoCompleteAddressBr\Helper\Config;
+use O2TI\AutoCompleteAddressBr\Model\ChangesFields;
 
 /**
  *  CheckoutAutoCompleteAddressBr - Change Components.
@@ -22,12 +23,15 @@ class CheckoutAutoCompleteAddressBr
     private $config;
 
     /**
-     * @param Config $config
+     * @param Config        $config
+     * @param ChangesFields $changesFields
      */
     public function __construct(
-        Config $config
+        Config $config,
+        ChangesFields $changesFields
     ) {
         $this->config = $config;
+        $this->changesFields = $changesFields;
     }
 
     /**
@@ -42,7 +46,7 @@ class CheckoutAutoCompleteAddressBr
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step'])) {
             // phpcs:ignore
             $createAccountFields = &$jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['create-account-fieldset']['children'];
-            $createAccountFields = $this->changeComponentFields($createAccountFields);
+            $createAccountFields = $this->changesFields->changeComponentFields($createAccountFields);
         }
 
         return $jsLayout;
@@ -60,7 +64,7 @@ class CheckoutAutoCompleteAddressBr
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step'])) {
             // phpcs:ignore
             $shippingFields = &$jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']['shippingAddress']['children']['shipping-address-fieldset']['children'];
-            $shippingFields = $this->changeComponentFields($shippingFields);
+            $shippingFields = $this->changesFields->changeComponentFields($shippingFields);
         }
 
         return $jsLayout;
@@ -79,66 +83,23 @@ class CheckoutAutoCompleteAddressBr
         foreach ($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children'] as &$payment) {
             if (isset($payment['children']['form-fields'])) {
                 $billingFields = &$payment['children']['form-fields']['children'];
-                $billingFields = $this->changeComponentFields($billingFields);
+                $billingFields = $this->changesFields->changeComponentFields($billingFields);
             }
         }
         // phpcs:ignore
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['afterMethods']['children']['billing-address-form'])) {
             // phpcs:ignore
             $billingAddressOnPage = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['afterMethods']['children']['billing-address-form']['children']['form-fields']['children'];
-            $billingAddressOnPage = $this->changeComponentFields($billingAddressOnPage);
+            $billingAddressOnPage = $this->changesFields->changeComponentFields($billingAddressOnPage);
         }
         // phpcs:ignore
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['beforeMethods']['children']['billing-address-form'])) {
             // phpcs:ignore
             $billingAddressOnPage = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['beforeMethods']['children']['billing-address-form']['children']['form-fields']['children'];
-            $billingAddressOnPage = $this->changeComponentFields($billingAddressOnPage);
+            $billingAddressOnPage = $this->changesFields->changeComponentFields($billingAddressOnPage);
         }
 
         return $jsLayout;
-    }
-
-    /**
-     * Change Components at Fields.
-     *
-     * @param array $fields
-     *
-     * @return array
-     */
-    public function changeComponentFields(array $fields): array
-    {
-        foreach ($fields as $key => $data) {
-            if ($key === 'postcode') {
-                $defaultPosition = (int) $fields[$key]['sortOrder'];
-                $fields[$key]['sortOrder'] = $defaultPosition;
-                $fields[$key]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/postcode';
-                if ($this->config->useInputMasking()) {
-                    // phpcs:ignore
-                    $fields[$key]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/O2TI/InputMasking/postcode';
-                }
-            }
-            if ($this->config->isHideTargetFields()) {
-                if ($key === 'street') {
-                    foreach ($fields[$key]['children'] as $arrayPosition => $streetLine) {
-                        // phpcs:ignore
-                        $fields[$key]['children'][$arrayPosition]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/street-inline';
-                    }
-                }
-                if ($key === 'city') {
-                    $fields[$key]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/city';
-                }
-                if ($key === 'region_id') {
-                    $fields[$key]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/region';
-                }
-                if ($key === 'country_id') {
-                    $fields[$key]['component'] = 'O2TI_AutoCompleteAddressBr/js/view/form/element/country';
-                }
-            }
-
-            continue;
-        }
-
-        return $fields;
     }
 
     /**
@@ -157,7 +118,6 @@ class CheckoutAutoCompleteAddressBr
             $jsLayout = $this->changeCreateAccount($jsLayout);
             $jsLayout = $this->changeShippingFields($jsLayout);
             $jsLayout = $this->changeBillingFields($jsLayout);
-            $layoutProcessor = $layoutProcessor;
         }
 
         return $jsLayout;
