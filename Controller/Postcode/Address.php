@@ -10,7 +10,9 @@ namespace O2TI\AutoCompleteAddressBr\Controller\Postcode;
 
 use InvalidArgumentException;
 use Magento\Directory\Model\Region;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
@@ -20,7 +22,7 @@ use O2TI\AutoCompleteAddressBr\Helper\Config;
 /**
  *  Controller Address - Complete Address by API.
  */
-class Address extends \Magento\Framework\App\Action\Action
+class Address extends Action implements HttpGetActionInterface
 {
     /**
      * @var ZendClientFactory
@@ -105,6 +107,7 @@ class Address extends \Magento\Framework\App\Action\Action
     {
         $client = $this->httpClientFactory->create();
         $api = $this->config->getConfigForDeveloper('api');
+        $url = 'http://endereco.ecorreios.com.br/app/enderecoCep.php?cep='.$zipcode;
 
         if ($api === 'ecorreios') {
             $url = 'http://endereco.ecorreios.com.br/app/enderecoCep.php?cep='.$zipcode;
@@ -123,8 +126,8 @@ class Address extends \Magento\Framework\App\Action\Action
             $responseBody = $client->request()->getBody();
             $result = $this->json->unserialize($responseBody);
             $result['success'] = true;
-        } catch (InvalidArgumentException $e) {
-            $exception = $e;
+        } catch (InvalidArgumentException $exc) {
+            $result['messages'] = $exc->getMessage();
         }
 
         return $result;
@@ -141,35 +144,24 @@ class Address extends \Magento\Framework\App\Action\Action
     {
         $api = $this->config->getConfigForDeveloper('api');
 
-        if ($data['uf']) {
+        if (isset($data['uf'])) {
             $region = $this->region->loadByCode($data['uf'], 'BR');
             $regionId = $region->getId();
         }
 
         if ($api === 'ecorreios') {
-            $street = isset($data['logradouro']) ? $data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['cidade']) ? $data['cidade'] : '';
+            $data = $this->getFormatECorreios($data);
         } elseif ($api === 'viacep') {
-            $street = isset($data['logradouro']) ? $data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['localidade']) ? $data['localidade'] : '';
+            $data = $this->getFormatViaCep($data);
         } elseif ($api === 'republicavirtual') {
-            $street = isset($data['logradouro']) ? $data['tipo_logradouro'].' '.$data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['cidade']) ? $data['cidade'] : '';
-        }
-
-        if ($data['uf']) {
-            $region = $this->region->loadByCode($data['uf'], 'BR');
-            $regionId = $region->getId();
+            $data = $this->getFormatRepublicaVirtual($data);
         }
 
         $apiData = [
             'success'   => $data['success'],
-            'street'    => isset($street) ? trim($street) : '',
-            'district'  => isset($district) ? trim($district) : '',
-            'city'      => isset($city) ? trim($city) : '',
+            'street'    => $data['street'],
+            'district'  => $data['district'],
+            'city'      => $data['city'],
             'uf'        => isset($regionId) ? $regionId : '',
             'provider'  => $this->config->getConfigForDeveloper('api'),
         ];
@@ -177,6 +169,54 @@ class Address extends \Magento\Framework\App\Action\Action
         $result = $this->getRelationShipReturn($apiData);
 
         return $result;
+    }
+
+    /**
+     * Get Format Return API ECorreios.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatECorreios(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
+
+        return $data;
+    }
+
+    /**
+     * Get Format Return API ViaCep.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatViaCep(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['localidade']) ? $data['localidade'] : '';
+
+        return $data;
+    }
+
+    /**
+     * Get Format Return API Republica Virtual.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatRepublicaVirtual(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
+
+        return $data;
     }
 
     /**
