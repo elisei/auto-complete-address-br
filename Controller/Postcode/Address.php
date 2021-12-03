@@ -150,24 +150,18 @@ class Address extends Action implements HttpGetActionInterface
         }
 
         if ($api === 'ecorreios') {
-            $street = isset($data['logradouro']) ? $data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['cidade']) ? $data['cidade'] : '';
+            $data = $this->getFormatECorreios($data);
         } elseif ($api === 'viacep') {
-            $street = isset($data['logradouro']) ? $data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['localidade']) ? $data['localidade'] : '';
+            $data = $this->getFormatViaCep($data);
         } elseif ($api === 'republicavirtual') {
-            $street = isset($data['logradouro']) ? $data['tipo_logradouro'].' '.$data['logradouro'] : '';
-            $district = isset($data['bairro']) ? trim($data['bairro']) : '';
-            $city = isset($data['cidade']) ? $data['cidade'] : '';
+            $data = $this->getFormatRepublicaVirtual($data);
         }
 
         $apiData = [
             'success'   => $data['success'],
-            'street'    => isset($street) ? trim($street) : '',
-            'district'  => isset($district) ? trim($district) : '',
-            'city'      => isset($city) ? trim($city) : '',
+            'street'    => $data['street'],
+            'district'  => $data['district'],
+            'city'      => $data['city'],
             'uf'        => isset($regionId) ? $regionId : '',
             'provider'  => $this->config->getConfigForDeveloper('api'),
         ];
@@ -175,6 +169,54 @@ class Address extends Action implements HttpGetActionInterface
         $result = $this->getRelationShipReturn($apiData);
 
         return $result;
+    }
+
+    /**
+     * Get Format Return API ECorreios.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatECorreios(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
+        
+        return $data;
+    }
+
+    /**
+     * Get Format Return API ViaCep.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatViaCep(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['localidade']) ? $data['localidade'] : '';
+        
+        return $data;
+    }
+
+    /**
+     * Get Format Return API Republica Virtual.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function getFormatRepublicaVirtual(array $data): array
+    {
+        $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
+        $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
+        $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
+        
+        return $data;
     }
 
     /**
