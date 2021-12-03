@@ -10,7 +10,9 @@ namespace O2TI\AutoCompleteAddressBr\Controller\Postcode;
 
 use InvalidArgumentException;
 use Magento\Directory\Model\Region;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
@@ -20,7 +22,7 @@ use O2TI\AutoCompleteAddressBr\Helper\Config;
 /**
  *  Controller Address - Complete Address by API.
  */
-class Address extends \Magento\Framework\App\Action\Action
+class Address extends Action implements HttpGetActionInterface
 {
     /**
      * @var ZendClientFactory
@@ -105,6 +107,7 @@ class Address extends \Magento\Framework\App\Action\Action
     {
         $client = $this->httpClientFactory->create();
         $api = $this->config->getConfigForDeveloper('api');
+        $url = 'http://endereco.ecorreios.com.br/app/enderecoCep.php?cep='.$zipcode;
 
         if ($api === 'ecorreios') {
             $url = 'http://endereco.ecorreios.com.br/app/enderecoCep.php?cep='.$zipcode;
