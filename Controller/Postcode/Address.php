@@ -126,8 +126,8 @@ class Address extends Action implements HttpGetActionInterface
             $responseBody = $client->request()->getBody();
             $result = $this->json->unserialize($responseBody);
             $result['success'] = true;
-        } catch (InvalidArgumentException $e) {
-            $exception = $e;
+        } catch (InvalidArgumentException $exc) {
+            $result['messages'] = $exc->getMessage();
         }
 
         return $result;
@@ -144,7 +144,7 @@ class Address extends Action implements HttpGetActionInterface
     {
         $api = $this->config->getConfigForDeveloper('api');
 
-        if ($data['uf']) {
+        if (isset($data['uf'])) {
             $region = $this->region->loadByCode($data['uf'], 'BR');
             $regionId = $region->getId();
         }
@@ -161,11 +161,6 @@ class Address extends Action implements HttpGetActionInterface
             $street = isset($data['logradouro']) ? $data['tipo_logradouro'].' '.$data['logradouro'] : '';
             $district = isset($data['bairro']) ? trim($data['bairro']) : '';
             $city = isset($data['cidade']) ? $data['cidade'] : '';
-        }
-
-        if ($data['uf']) {
-            $region = $this->region->loadByCode($data['uf'], 'BR');
-            $regionId = $region->getId();
         }
 
         $apiData = [
