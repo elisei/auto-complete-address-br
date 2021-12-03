@@ -183,7 +183,7 @@ class Address extends Action implements HttpGetActionInterface
         $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
         $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
         $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
-        
+
         return $data;
     }
 
@@ -199,7 +199,7 @@ class Address extends Action implements HttpGetActionInterface
         $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
         $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
         $data['city'] = isset($data['localidade']) ? $data['localidade'] : '';
-        
+
         return $data;
     }
 
@@ -215,7 +215,7 @@ class Address extends Action implements HttpGetActionInterface
         $data['street'] = isset($data['logradouro']) ? $data['logradouro'] : '';
         $data['district'] = isset($data['bairro']) ? trim($data['bairro']) : '';
         $data['city'] = isset($data['cidade']) ? $data['cidade'] : '';
-        
+
         return $data;
     }
 
