@@ -8,6 +8,7 @@ Status Atual
 
 [![Build Status](https://app.travis-ci.com/elisei/auto-complete-address-br.svg?branch=Magento%402.3)](https://app.travis-ci.com/elisei/auto-complete-address-br)
 [![StyleCI](https://github.styleci.io/repos/432324539/shield?branch=Magento@2.3)](https://github.styleci.io/repos/432324539?branch=Magento@2.3)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/elisei/auto-complete-address-br/badges/quality-score.png?b=Magento%402.3)](https://scrutinizer-ci.com/g/elisei/auto-complete-address-br/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/939d6dc3ac134fb384b67075bda95022)](https://www.codacy.com/gh/elisei/auto-complete-address-br/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elisei/auto-complete-address-br&amp;utm_campaign=Badge_Grade)
 
 
