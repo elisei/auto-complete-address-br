@@ -39,7 +39,7 @@ O módulo tem 3 API's integradas, você pode definir qual utilizar.
 
 ## Instalação e Configuração
 
-Visite nossa [Wiki](wiki) e veja como configurar e instalar nosso módulo.
+Visite nossa [Wiki](https://github.com/elisei/auto-complete-address-br/wiki) e veja como configurar e instalar nosso módulo.
 
 ## License
 
