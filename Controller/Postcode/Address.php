@@ -9,13 +9,13 @@
 namespace O2TI\AutoCompleteAddressBr\Controller\Postcode;
 
 use InvalidArgumentException;
+use Laminas\Http\ClientFactory;
+use Laminas\Http\Request;
 use Magento\Directory\Model\Region;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use O2TI\AutoCompleteAddressBr\Helper\Config;
 
@@ -25,7 +25,7 @@ use O2TI\AutoCompleteAddressBr\Helper\Config;
 class Address extends Action implements HttpGetActionInterface
 {
     /**
-     * @var ZendClientFactory
+     * @var ClientFactory
      */
     protected $httpClientFactory;
 
@@ -50,16 +50,16 @@ class Address extends Action implements HttpGetActionInterface
     protected $config;
 
     /**
-     * @param Context           $context
-     * @param ZendClientFactory $httpClientFactory
-     * @param JsonFactory       $resultJsonFactory
-     * @param Region            $region
-     * @param Json              $json
-     * @param Config            $config
+     * @param Context       $context
+     * @param ClientFactory $httpClientFactory
+     * @param JsonFactory   $resultJsonFactory
+     * @param Region        $region
+     * @param Json          $json
+     * @param Config        $config
      */
     public function __construct(
         Context $context,
-        ZendClientFactory $httpClientFactory,
+        ClientFactory $httpClientFactory,
         JsonFactory $resultJsonFactory,
         Region $region,
         Json $json,
@@ -121,9 +121,8 @@ class Address extends Action implements HttpGetActionInterface
 
         try {
             $client->setUri($url);
-            $client->setConfig(['maxredirects' => 0, 'timeout' => 120]);
-            $client->setMethod(ZendClient::GET);
-            $responseBody = $client->request()->getBody();
+            $client->setMethod(Request::METHOD_GET);
+            $responseBody = $client->send()->getBody();
             $result = $this->json->unserialize($responseBody);
             $result['success'] = true;
         } catch (InvalidArgumentException $exc) {
