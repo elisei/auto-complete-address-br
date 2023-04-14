@@ -23,6 +23,11 @@ class CheckoutAutoCompleteAddressBr
     private $config;
 
     /**
+     * @var ChangesFields
+     */
+    private $changesFields;
+
+    /**
      * @param Config        $config
      * @param ChangesFields $changesFields
      */
