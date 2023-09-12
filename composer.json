@@ -23,7 +23,6 @@
         "magento/module-backend": "102.0.*",
         "magento/module-theme": "101.1.*",
         "magento/module-ui": "101.2.*",
-        "magento/zendframework1": "~1.14.2",
         "ext-json": "*"
     },
     "autoload": {
