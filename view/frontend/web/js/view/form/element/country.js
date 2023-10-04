@@ -25,8 +25,9 @@ define([
          * {@inheritdoc}
          */
         initialize: function () {
+            var self = this;
             this._super();
-            self = this._super();
+            
 
             if(this.options().length === 1){
                 this.setVisible(false);
@@ -82,4 +83,3 @@ define([
         }
     });
 });
-
