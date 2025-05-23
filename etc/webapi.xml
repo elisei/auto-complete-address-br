@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © O2TI. All rights reserved.
+ *
+ * @author    Bruno Elisei <brunoelisei@o2ti.com>
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Define the route for the address finder API -->
+    <route url="/V1/o2ti/addressfinder/:zipcode" method="GET">
+        <service class="O2TI\AutoCompleteAddressBr\Api\AddressFinderInterface" method="findByZipcode"/>
+        <resources>
+            <!-- Allow anonymous access, adjust if authentication is needed -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>
+

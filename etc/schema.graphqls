@@ -1,0 +1,15 @@
+type Query {
+    findAddressByZipcode(zipcode: String! @doc(description: "The Brazilian zipcode (CEP) to search for. Should contain only numbers.")) : AddressOutput @resolver(class: "O2TI\\AutoCompleteAddressBr\\Model\\Resolver\\AddressFinder") @doc(description: "Finds address details based on a Brazilian zipcode (CEP).")
+}
+
+type AddressOutput @doc(description: "Contains the address details found for the given zipcode") {
+    success: Boolean! @doc(description: "Indicates if the address lookup was successful")
+    street_line_1: String @doc(description: "The primary street address line (e.g., Logradouro)")
+    street_line_2: String @doc(description: "The secondary street address line (e.g., Bairro)")
+    city: String @doc(description: "The city name")
+    region_id: Int @doc(description: "The Magento region ID (state/province)")
+    country_id: String @doc(description: "The country ID (always BR for this module)")
+    provider: String @doc(description: "The external API provider used (e.g., viacep, republicavirtual)")
+    messages: String @doc(description: "Error messages if the lookup failed")
+}
+

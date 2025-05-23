@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © O2TI. All rights reserved.
+ *
+ * @author    Bruno Elisei <brunoelisei@o2ti.com>
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Preference for the Address Finder API Interface -->
+    <preference for="O2TI\AutoCompleteAddressBr\Api\AddressFinderInterface" type="O2TI\AutoCompleteAddressBr\Model\AddressFinder"/>
+
+    <!-- Preference for the Address Data Interface -->
+    <preference for="O2TI\AutoCompleteAddressBr\Api\Data\AddressInterface" type="O2TI\AutoCompleteAddressBr\Model\Data\Address"/>
+
+    <!-- Plugin for Checkout - Assuming this should remain -->
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="O2TI_AutoCompleteAddressBr::LayoutProcessor" type="O2TI\AutoCompleteAddressBr\Plugin\CheckoutAutoCompleteAddressBr" sortOrder="100"/>
+    </type>
+
+    <!-- Configuration for the original controller (if still needed elsewhere, otherwise can be reviewed) -->
+    <!-- If the frontend controller O2TI\AutoCompleteAddressBr\Controller\Postcode\Address is still used by frontend JS, -->
+    <!-- ensure its dependencies are correctly injected (AddressFinderLogic) -->
+    <type name="O2TI\AutoCompleteAddressBr\Controller\Postcode\Address">
+        <arguments>
+            <argument name="addressFinder" xsi:type="object">O2TI\AutoCompleteAddressBr\Model\Api\AddressFinder</argument>
+        </arguments>
+    </type>
+
+    <!-- Configuration for the API Model Implementation -->
+    <type name="O2TI\AutoCompleteAddressBr\Model\AddressFinder">
+        <arguments>
+             <argument name="addressFinderLogic" xsi:type="object">O2TI\AutoCompleteAddressBr\Model\Api\AddressFinder</argument>
+             <argument name="addressFactory" xsi:type="object">O2TI\AutoCompleteAddressBr\Api\Data\AddressInterfaceFactory</argument>
+             <argument name="configHelper" xsi:type="object">O2TI\AutoCompleteAddressBr\Helper\Config</argument>
+        </arguments>
+    </type>
+
+     <!-- Configuration for the Core Logic Model -->
+    <type name="O2TI\AutoCompleteAddressBr\Model\Api\AddressFinder">
+        <arguments>
+            <argument name="httpClientFactory" xsi:type="object">Laminas\Http\ClientFactory</argument>
+            <argument name="region" xsi:type="object">Magento\Directory\Model\Region</argument>
+            <argument name="json" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+            <argument name="config" xsi:type="object">O2TI\AutoCompleteAddressBr\Helper\Config</argument>
+        </arguments>
+    </type>
+
+</config>
+
