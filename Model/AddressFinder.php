@@ -97,10 +97,10 @@ class AddressFinder implements AddressFinderInterface
             }
 
         } catch (NoSuchEntityException $exc) {
-             $addressDataObject->setSuccess(false);
-             $addressDataObject->setMessages($exc->getMessage());
+            $addressDataObject->setSuccess(false);
+            $addressDataObject->setMessages($exc->getMessage());
 
-             throw $exc->getMessage();
+            throw new LocalizedException(__($exc->getMessage()));
         } catch (\Exception $exc) {
             $addressDataObject->setSuccess(false);
             $addressDataObject->setMessages($exc->getMessage());
